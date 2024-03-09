@@ -73,9 +73,27 @@ namespace TelnetApi.Controllers
                 };
                 return Ok(result);
             }
-            
         }
+        [HttpPut("/servicios/tienda/actualizartienda/{tiendaId}")]
+        public ActionResult ActualizarTienda(int tiendaId, [FromBody] DtoTienda tienda)
+        {
+            var existingTienda = _dbContext.Tienda.Find(tiendaId);
+            if (existingTienda == null)
+            {
+                return NotFound();
+            }
 
-        
+            existingTienda.nombre = tienda.nombre;
+            existingTienda.direccion = tienda.direccion;
+
+            _dbContext.SaveChanges();
+
+            var result = new
+            {
+                tienda = existingTienda
+            };
+
+            return Ok(result);
+        }
     }
 }
